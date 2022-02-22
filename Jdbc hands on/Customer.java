@@ -5,7 +5,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
-
+class Transaction{
+	int operation;
+	int amount;
+	Transaction next=null;
+	public void display() {
+		switch(operation) {
+		case 1:
+			System.out.println("Checked balance it was:"+amount);
+			break;
+		case 2:
+			System.out.println("Deposited amount: "+amount);
+			break;
+		case 3:
+			System.out.println("Withdrawn amount: "+amount);
+			break;
+		default:
+			System.out.println("");
+		}
+	}
+}
 public class Customer {
 	static Scanner sc = new Scanner(System.in);
 	static int account_no=0,balance=0;
@@ -31,35 +50,64 @@ public class Customer {
 			account_no= rs.getInt(1);
 			acc_name=rs.getString(2);
 			balance=rs.getInt(3);
+			PreparedStatement pr1=con.prepareStatement("update bank set balance =? where account_no=? ");
+			
 			System.out.println(account_no+" "+ acc_name);
 			if(acc==account_no) {
-				int ch=0;
-				while(ch!=4) {
+				int ch=0,count=0;
+				Transaction Head=null,Tail=null;
+				
+				while(ch!=5) {
 					pr.setInt(1, acc);
 					rs = pr.executeQuery();
 					rs.next();
 					account_no= rs.getInt(1);
 					acc_name=rs.getString(2);
 					balance=rs.getInt(3);
+					if(count==6) {
+						Head=Head.next;
+					}
 				
 				System.out.println("Chose what you want to do:");
 				System.out.println("1. to check balance:");
 				System.out.println("2. to deposit:");
 				System.out.println("3. to withdraw:");
-				System.out.println("4. to exit:");
+				System.out.println("4. to check last 5 transaction");
+				System.out.println("5. to exit:");
 				ch= sc.nextInt();
 				switch(ch) {
 				case 1:
 					System.out.println("Available balance: "+balance);
+					if(Head==null) {
+						Head=new Transaction();
+						Tail=Head;
+					}
+					else {
+						Tail.next=new Transaction();
+						Tail=Tail.next;
+					}
+					Tail.amount=balance;
+					Tail.operation=1;
+					count++;
 					break;
 				case 2:
-					PreparedStatement pr1=con.prepareStatement("update bank set balance =? where account_no=? ");
 					System.out.println("Enter amount to deposit:");
 					int bal=sc.nextInt();
 					pr1.setInt(1, balance+bal);
 					pr1.setInt(2, account_no);
 					pr1.executeUpdate();
 					System.out.println("Deposited");
+					if(Head==null) {
+						Head=new Transaction();
+						Tail=Head;
+					}
+					else {
+						Tail.next=new Transaction();
+						Tail=Tail.next;
+					}
+					Tail.amount=bal;
+					Tail.operation=2;
+					count++;
 					break;
 				case 3:
 					if(balance>10000) {
@@ -68,10 +116,28 @@ public class Customer {
 							rs=pr.executeQuery();
 							rs.next();
 							System.out.println("New Balance:"+rs.getInt(3));
+							if(Head==null) {
+								Head=new Transaction();
+								Tail=Head;
+							}
+							else {
+								Tail.next=new Transaction();
+								Tail=Tail.next;
+							}
+							Tail.amount=balance-rs.getInt(3);
+							Tail.operation=3;
+							count++;
 						}
 					}
 					else {
 						System.out.println("Available balance too low to withdraw");
+					}
+					break;
+				case 4:
+					Transaction temp=Head;
+					while(temp!=null) {
+						temp.display();
+						temp=temp.next;
 					}
 					break;
 				default:
