@@ -13,7 +13,7 @@ public class GetConnection{
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			System.out.println("Connection..");
 			//step 2
-			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/hands_on","root","Shivesh");
+			con = DriverManager.getConnection("jdbc_url","username","password");
 			System.out.println("Connection established");
 			//step 3
 			
