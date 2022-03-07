@@ -16,7 +16,7 @@
         Class.forName("com.mysql.jdbc.Driver");
         System.out.println("Connection..");
 		//step 2
-		Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/classicmodels","root","Shivesh");
+		Connection conn = DriverManager.getConnection("jdbc:url","user","your password");
 		System.out.println("Connection established");
 		out.println("Connected");
         PreparedStatement pst = conn.prepareStatement("Select user,pass from login where user=? and pass=?");
