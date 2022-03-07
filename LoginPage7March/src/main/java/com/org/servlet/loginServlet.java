@@ -44,7 +44,7 @@ public class loginServlet extends HttpServlet {
 			con =DriverManager.getConnection("jdbc:mysql://localhost:3306/classicmodels","username","password");
 			System.out.println(" Connecting... to DB ");
 			
-			 pstmt = con.prepareStatement("select *from login where username=? and password=?");
+			 pstmt = con.prepareStatement("select * from login where username=? and password=?");
 			 pstmt.setString(1, username);
 		        pstmt.setString(2, password);
 			System.out.println("Query exceution done!...");
@@ -101,7 +101,7 @@ public class loginServlet extends HttpServlet {
 				con =DriverManager.getConnection("jdbc:mysql://localhost:3306/classicmodels","username","password");
 				System.out.println(" Connecting... to DB ");
 				
-				 psmt = con.prepareStatement("select * from login.product");
+				 psmt = con.prepareStatement("select * from product");
 				
 			    //psmt.setString(1, prod);
 				ResultSet rs = psmt.executeQuery();
