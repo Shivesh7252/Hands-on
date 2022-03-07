@@ -98,7 +98,7 @@ public class loginServlet extends HttpServlet {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				System.out.println("Driver is loading...");
 				
-				con =DriverManager.getConnection("jdbc:mysql://localhost:3306/login","root","root@_123");
+				con =DriverManager.getConnection("jdbc:mysql://localhost:3306/classicmodels","username","password");
 				System.out.println(" Connecting... to DB ");
 				
 				 psmt = con.prepareStatement("select * from login.product");
